@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexBill Pro - Smart GST Billing &amp; Invoicing Software</title>
+  <meta name="description" content="Professional GST Billing Software with real-time tax calculations, company logo space, buyer/supplier management, amount in words, and digital stamp & signature.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-light">
+  <!-- Top Application Navigation Bar -->
+  <header class="app-header no-print">
+    <div class="header-brand">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">ApexBill <span class="badge-pro">PRO GST</span></span>
+        <span class="brand-subtitle">Smart Commercial Invoicing Software</span>
+      </div>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button type="button" id="btn-sample-data" class="btn btn-outline" title="Populate with realistic sample invoice data">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Load Demo
+      </button>
+
+      <button type="button" id="btn-new-invoice" class="btn btn-outline" title="Create clean new invoice">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        New Invoice
+      </button>
+
+      <button type="button" id="btn-save-draft" class="btn btn-secondary" title="Save invoice to local storage">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        Save
+      </button>
+
+      <button type="button" id="btn-saved-list" class="btn btn-outline" title="View saved invoices">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        Saved (<span id="saved-count">0</span>)
+      </button>
+
+      <button type="button" id="btn-print" class="btn btn-primary btn-glow" title="Print invoice or save as PDF">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Print / PDF
+      </button>
+
+      <button type="button" id="btn-theme-toggle" class="btn btn-icon" title="Toggle dark/light UI mode">
+        <span id="theme-icon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Workspace Container (Dual-Pane Split View) -->
+  <main class="app-layout">
+    <!-- Left Configuration & Form Editor Sidebar -->
+    <aside class="sidebar-editor no-print" id="sidebar-editor">
+      <div class="sidebar-tabs">
+        <button type="button" class="tab-btn active" data-tab="tab-parties">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Parties &amp; Logo
+        </button>
+        <button type="button" class="tab-btn" data-tab="tab-items">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+          Products (<span id="items-badge-count">1</span>)
+        </button>
+        <button type="button" class="tab-btn" data-tab="tab-taxes">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Tax &amp; Totals
+        </button>
+        <button type="button" class="tab-btn" data-tab="tab-sign">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+          Stamp &amp; Sign
+        </button>
+      </div>
+
+      <div class="sidebar-scrollable">
+        <!-- TAB 1: Parties, Logo & Invoice Meta -->
+        <section id="tab-parties" class="tab-content active">
+          
+          <!-- Company Logo Card (Top-Middle Space Control) -->
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">1</span>
+              <h3>Company Logo <span class="tag-accent">Top Middle Placed</span></h3>
+            </div>
+            <div class="card-body">
+              <p class="field-hint">Your company logo will be rendered prominently at the top middle of the invoice.</p>
+              
+              <div class="logo-uploader-box">
+                <div class="logo-preview-wrapper" id="logo-preview-wrapper">
+                  <img id="logo-preview-img" src="logo-placeholder.svg" alt="Company Logo">
+                </div>
+                <div class="logo-actions">
+                  <label for="input-logo-file" class="btn btn-sm btn-outline">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    Upload Logo
+                  </label>
+                  <input type="file" id="input-logo-file" accept="image/*" style="display:none;">
+                  <button type="button" id="btn-reset-logo" class="btn btn-sm btn-ghost" title="Reset to default logo">Reset Default</button>
+                  <button type="button" id="btn-remove-logo" class="btn btn-sm btn-ghost text-danger" title="Remove logo entirely">Remove</button>
+                </div>
+              </div>
+
+              <div class="form-row mt-2">
+                <div class="form-group flex-1">
+                  <label for="logo-height-slider">Logo Height (<span id="logo-height-val">65px</span>)</label>
+                  <input type="range" id="logo-height-slider" min="40" max="110" value="65" class="slider-input">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="logo-align-select">Header Placement</label>
+                  <select id="logo-align-select" class="form-control">
+                    <option value="center" selected>Top Middle (Standard)</option>
+                    <option value="left">Top Left</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invoice General Meta -->
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">2</span>
+              <h3>Invoice Details</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="inv-number">Invoice Number *</label>
+                  <input type="text" id="inv-number" class="form-control" value="INV-2026-0842" required>
+                </div>
+                <div class="form-group flex-1">
+                  <label for="inv-type">Invoice Title</label>
+                  <select id="inv-type" class="form-control">
+                    <option value="TAX INVOICE">TAX INVOICE (GST)</option>
+                    <option value="COMMERCIAL INVOICE">COMMERCIAL INVOICE</option>
+                    <option value="BILL OF SUPPLY">BILL OF SUPPLY</option>
+                    <option value="PROFORMA INVOICE">PROFORMA INVOICE</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="inv-date">Invoice Date *</label>
+                  <input type="date" id="inv-date" class="form-control" required>
+                </div>
+                <div class="form-group flex-1">
+                  <label for="inv-due-date">Due Date</label>
+                  <input type="date" id="inv-due-date" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="inv-copy-type">Copy Type</label>
+                  <select id="inv-copy-type" class="form-control">
+                    <option value="ORIGINAL FOR RECIPIENT">Original for Recipient</option>
+                    <option value="DUPLICATE FOR TRANSPORTER">Duplicate for Transporter</option>
+                    <option value="TRIPLICATE FOR SUPPLIER">Triplicate for Supplier</option>
+                  </select>
+                </div>
+                <div class="form-group flex-1">
+                  <label for="place-of-supply">Place of Supply (State)</label>
+                  <input type="text" id="place-of-supply" class="form-control" value="Delhi (07)" placeholder="e.g. Maharashtra (27)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supplier / Seller Details -->
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">3</span>
+              <h3>Supplier (Seller) Details</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="supplier-name">Supplier / Business Name *</label>
+                <input type="text" id="supplier-name" class="form-control" value="Apex Enterprises Pvt Ltd" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="supplier-gstin">Supplier GSTIN Number *</label>
+                  <input type="text" id="supplier-gstin" class="form-control uppercase" value="07AAAAA1234A1Z5" maxlength="15" placeholder="15-digit GSTIN" required>
+                  <span class="gstin-status" id="supplier-gstin-status"></span>
+                </div>
+                <div class="form-group flex-1">
+                  <label for="supplier-pan">PAN Number</label>
+                  <input type="text" id="supplier-pan" class="form-control uppercase" value="AAAAA1234A" maxlength="10" placeholder="10-digit PAN">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="supplier-address">Supplier Address</label>
+                <textarea id="supplier-address" class="form-control" rows="2" placeholder="Street, Industrial Area, City, Pincode">Plot 45, Okhla Industrial Area, Phase-III, New Delhi - 110020</textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="supplier-phone">Phone / Mobile</label>
+                  <input type="text" id="supplier-phone" class="form-control" value="+91 98765 43210">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="supplier-email">Email Address</label>
+                  <input type="email" id="supplier-email" class="form-control" value="billing@apexcorp.com">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="supplier-state">Supplier State</label>
+                  <input type="text" id="supplier-state" class="form-control" value="Delhi">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="supplier-state-code">State Code</label>
+                  <input type="text" id="supplier-state-code" class="form-control" value="07">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buyer (Customer) Details -->
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">4</span>
+              <h3>Buyer (Customer / Billed To) Details</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="buyer-name">Buyer Name / Company *</label>
+                <input type="text" id="buyer-name" class="form-control" value="Nexus Infotech Solutions LLP" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="buyer-gstin">Buyer GSTIN Number *</label>
+                  <input type="text" id="buyer-gstin" class="form-control uppercase" value="27BBBBB5678B1Z2" maxlength="15" placeholder="15-digit GSTIN" required>
+                  <span class="gstin-status" id="buyer-gstin-status"></span>
+                </div>
+                <div class="form-group flex-1">
+                  <label for="buyer-phone">Buyer Contact</label>
+                  <input type="text" id="buyer-phone" class="form-control" value="+91 91234 56789">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="buyer-address">Billing Address</label>
+                <textarea id="buyer-address" class="form-control" rows="2" placeholder="Street, Complex, City, Pincode">Suite 502, Cyber Tower B, Hinjewadi Phase 1, Pune, Maharashtra - 411057</textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="buyer-state">Buyer State</label>
+                  <input type="text" id="buyer-state" class="form-control" value="Maharashtra">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="buyer-state-code">State Code</label>
+                  <input type="text" id="buyer-state-code" class="form-control" value="27">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="buyer-email">Buyer Email</label>
+                <input type="email" id="buyer-email" class="form-control" value="accounts@nexusinfotech.io">
+              </div>
+
+              <div class="checkbox-row mt-1">
+                <input type="checkbox" id="same-shipping" checked>
+                <label for="same-shipping">Shipping details are same as billing details</label>
+              </div>
+
+              <div id="shipping-details-container" style="display:none;" class="mt-2">
+                <div class="form-group">
+                  <label for="shipping-address">Shipped To (Delivery Address)</label>
+                  <textarea id="shipping-address" class="form-control" rows="2" placeholder="Full Delivery Address"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: Products & Line Items -->
+        <section id="tab-items" class="tab-content">
+          <div class="card-group">
+            <div class="card-group-header space-between">
+              <div class="flex-align-gap">
+                <span class="step-num">5</span>
+                <h3>Invoice Line Items</h3>
+              </div>
+              <button type="button" id="btn-add-item" class="btn btn-sm btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                + Add Product
+              </button>
+            </div>
+            
+            <div class="card-body">
+              <p class="field-hint mb-2">Add items with description, quantity, rate, and tax rate. Amounts and totals are automatically calculated in real time.</p>
+              
+              <div id="items-form-list" class="items-editor-container">
+                <!-- Dynamically rendered item rows / cards -->
+              </div>
+
+              <div class="mt-3">
+                <button type="button" id="btn-add-item-bottom" class="btn btn-outline btn-block">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  Add Another Product / Service
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: Tax, Discount, Bank Details & Totals -->
+        <section id="tab-taxes" class="tab-content">
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">6</span>
+              <h3>Tax Type &amp; Adjustments</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>GST Supply Type</label>
+                <div class="radio-pill-group">
+                  <label class="radio-pill">
+                    <input type="radio" name="gst-supply-type" value="inter" id="radio-inter" checked>
+                    <span>Inter-State (IGST)</span>
+                  </label>
+                  <label class="radio-pill">
+                    <input type="radio" name="gst-supply-type" value="intra" id="radio-intra">
+                    <span>Intra-State (CGST + SGST)</span>
+                  </label>
+                </div>
+                <small class="text-muted mt-1 display-block" id="tax-explanation-note">
+                  Inter-state supply: Single IGST tax is applied across states.
+                </small>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="overall-discount">Special Discount (₹)</label>
+                  <input type="number" id="overall-discount" class="form-control" min="0" step="any" value="0">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="shipping-charges">Freight / Shipping (₹)</label>
+                  <input type="number" id="shipping-charges" class="form-control" min="0" step="any" value="0">
+                </div>
+              </div>
+
+              <div class="checkbox-row mt-2">
+                <input type="checkbox" id="auto-roundoff" checked>
+                <label for="auto-roundoff">Auto Round Off to nearest Rupee</label>
+              </div>
+
+              <div class="form-group mt-2">
+                <label for="currency-symbol">Currency Symbol</label>
+                <select id="currency-symbol" class="form-control">
+                  <option value="₹" selected>₹ (INR - Indian Rupee)</option>
+                  <option value="$">$ (USD - US Dollar)</option>
+                  <option value="€">€ (EUR - Euro)</option>
+                  <option value="£">£ (GBP - British Pound)</option>
+                  <option value="AED ">AED (UAE Dirham)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bank Account Details for Payment -->
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">7</span>
+              <h3>Bank Details &amp; Payment UPI</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="bank-name">Bank Name</label>
+                  <input type="text" id="bank-name" class="form-control" value="HDFC Bank Ltd">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="bank-ac-number">Account Number</label>
+                  <input type="text" id="bank-ac-number" class="form-control" value="50200089123456">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="bank-ifsc">IFSC Code</label>
+                  <input type="text" id="bank-ifsc" class="form-control uppercase" value="HDFC0001234">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="bank-branch">Branch</label>
+                  <input type="text" id="bank-branch" class="form-control" value="Okhla Phase III, New Delhi">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label for="bank-upi">UPI ID (For Instant Payment)</label>
+                  <input type="text" id="bank-upi" class="form-control" value="apexenterprises@hdfcbank">
+                </div>
+                <div class="form-group flex-1">
+                  <label for="show-qr-code">Show QR Code on Bill</label>
+                  <select id="show-qr-code" class="form-control">
+                    <option value="yes" selected>Yes (Dynamic Scan &amp; Pay)</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes & Terms -->
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">8</span>
+              <h3>Terms &amp; Conditions / Notes</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="inv-terms">Terms &amp; Conditions</label>
+                <textarea id="inv-terms" class="form-control" rows="3">1. Payment terms: 100% within 15 days from the date of invoice.
+2. Interest @ 18% p.a. will be charged for delayed payments.
+3. Goods once sold will not be taken back or exchanged.
+4. Subject to Delhi jurisdiction only.</textarea>
+              </div>
+              <div class="form-group">
+                <label for="inv-notes">Customer Notes / Remarks</label>
+                <input type="text" id="inv-notes" class="form-control" value="Thank you for your valued business!">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: Seller Signature & Rubber Stamp -->
+        <section id="tab-sign" class="tab-content">
+          <div class="card-group">
+            <div class="card-group-header">
+              <span class="step-num">9</span>
+              <h3>Seller Signature &amp; Stamp Setup</h3>
+            </div>
+            <div class="card-body">
+              <p class="field-hint">Add an authentic digital rubber stamp and signature of the authorized seller.</p>
+
+              <!-- Rubber Stamp Box -->
+              <div class="sub-section-box">
+                <div class="sub-header-row">
+                  <h4>1. Company Rubber Stamp</h4>
+                  <div class="toggle-switch">
+                    <input type="checkbox" id="toggle-stamp" checked>
+                    <label for="toggle-stamp">Show Stamp</label>
+                  </div>
+                </div>
+
+                <div id="stamp-controls-area">
+                  <div class="form-row mt-1">
+                    <div class="form-group flex-1">
+                      <label for="stamp-text-company">Stamp Company Name</label>
+                      <input type="text" id="stamp-text-company" class="form-control" value="APEX ENTERPRISES PVT LTD">
+                    </div>
+                    <div class="form-group flex-1">
+                      <label for="stamp-color">Stamp Ink Color</label>
+                      <select id="stamp-color" class="form-control">
+                        <option value="#dc2626" selected>Ruby Red Ink</option>
+                        <option value="#2563eb">Navy Blue Ink</option>
+                        <option value="#7c3aed">Royal Purple Ink</option>
+                        <option value="#059669">Forest Green Ink</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group flex-1">
+                      <label for="stamp-rotation">Stamp Tilt Angle</label>
+                      <input type="range" id="stamp-rotation" min="-25" max="25" value="-8" class="slider-input">
+                    </div>
+                    <div class="form-group flex-1">
+                      <label>Custom Stamp Image</label>
+                      <label for="input-custom-stamp" class="btn btn-sm btn-outline btn-block">
+                        Upload Stamp PNG
+                      </label>
+                      <input type="file" id="input-custom-stamp" accept="image/*" style="display:none;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Seller Signature Box -->
+              <div class="sub-section-box mt-3">
+                <div class="sub-header-row">
+                  <h4>2. Seller Signature</h4>
+                  <div class="toggle-switch">
+                    <input type="checkbox" id="toggle-signature" checked>
+                    <label for="toggle-signature">Show Signature</label>
+                  </div>
+                </div>
+
+                <div id="signature-controls-area">
+                  <div class="signature-canvas-container">
+                    <canvas id="signature-pad" width="340" height="130"></canvas>
+                    <div class="signature-hint-watermark" id="signature-hint">Draw Signature Here</div>
+                  </div>
+
+                  <div class="sig-action-bar">
+                    <button type="button" id="btn-clear-sig" class="btn btn-sm btn-outline">Clear Canvas</button>
+                    <div class="sig-pen-colors">
+                      <span class="pen-dot active" data-color="#1e293b" style="background:#1e293b;" title="Black Ink"></span>
+                      <span class="pen-dot" data-color="#1d4ed8" style="background:#1d4ed8;" title="Blue Ink"></span>
+                    </div>
+                    <label for="input-sig-file" class="btn btn-sm btn-ghost" title="Upload signature image">
+                      Upload Sign Image
+                    </label>
+                    <input type="file" id="input-sig-file" accept="image/*" style="display:none;">
+                  </div>
+
+                  <div class="form-row mt-2">
+                    <div class="form-group flex-1">
+                      <label for="signatory-name">Signatory Person Name</label>
+                      <input type="text" id="signatory-name" class="form-control" value="Rajesh Sharma">
+                    </div>
+                    <div class="form-group flex-1">
+                      <label for="signatory-designation">Designation</label>
+                      <input type="text" id="signatory-designation" class="form-control" value="Director / Partner">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Quick Footer Summary Bar on Editor Pane -->
+      <div class="editor-footer-summary">
+        <div class="summary-metric">
+          <span class="metric-label">Grand Total</span>
+          <span class="metric-value" id="quick-total-display">₹ 0.00</span>
+        </div>
+        <button type="button" id="btn-quick-print" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Print Invoice
+        </button>
+      </div>
+    </aside>
+
+    <!-- Right Live Preview Pane -->
+    <section class="invoice-preview-container" id="preview-section">
+      <!-- Toolbar for zooming and layout modes -->
+      <div class="preview-toolbar no-print">
+        <div class="toolbar-title">
+          <span class="status-indicator"></span>
+          Live A4 Sheet Preview
+        </div>
+        <div class="toolbar-controls">
+          <span class="zoom-label">Zoom:</span>
+          <button type="button" class="btn-zoom" id="btn-zoom-out" title="Zoom Out">−</button>
+          <span id="zoom-value" class="zoom-percentage">100%</span>
+          <button type="button" class="btn-zoom" id="btn-zoom-in" title="Zoom In">+</button>
+          <button type="button" class="btn-zoom" id="btn-zoom-reset" title="Fit to width">Fit</button>
+        </div>
+      </div>
+
+      <!-- The Printable A4 Sheet Wrapper -->
+      <div class="a4-sheet-wrapper" id="sheet-wrapper">
+        <article class="invoice-sheet" id="invoice-sheet">
+          
+          <!-- TOP INVOICE HEADER -->
+          <div class="invoice-top-bar">
+            <div class="invoice-title-wrapper">
+              <h1 class="invoice-main-heading" id="view-inv-type">TAX INVOICE</h1>
+              <span class="invoice-sub-badge" id="view-copy-type">ORIGINAL FOR RECIPIENT</span>
+            </div>
+          </div>
+
+          <!-- TOP MIDDLE LOGO CONTAINER (As specifically requested by user) -->
+          <div class="invoice-top-middle-logo-container" id="top-middle-logo-container">
+            <div class="logo-box" id="sheet-logo-box">
+              <img id="view-company-logo" src="logo-placeholder.svg" alt="Company Logo">
+            </div>
+          </div>
+
+          <!-- SUPPLIER & INVOICE DETAILS GRID -->
+          <div class="inv-header-grid">
+            <!-- Supplier Card -->
+            <div class="inv-meta-card supplier-card">
+              <div class="card-caption">SUPPLIER / CONSIGNOR DETAILS</div>
+              <div class="supplier-main-name" id="view-supplier-name">Apex Enterprises Pvt Ltd</div>
+              <div class="address-line" id="view-supplier-address">Plot 45, Okhla Industrial Area, Phase-III, New Delhi - 110020</div>
+              
+              <div class="meta-row-compact">
+                <span class="meta-tag">GSTIN:</span>
+                <strong class="gstin-badge" id="view-supplier-gstin">07AAAAA1234A1Z5</strong>
+              </div>
+              <div class="meta-row-compact">
+                <span class="meta-tag">PAN:</span>
+                <span id="view-supplier-pan">AAAAA1234A</span>
+                <span class="meta-divider">|</span>
+                <span class="meta-tag">State:</span>
+                <span id="view-supplier-state">Delhi (07)</span>
+              </div>
+              <div class="meta-row-compact">
+                <span class="meta-tag">Contact:</span>
+                <span id="view-supplier-contact">+91 98765 43210</span>
+                <span class="meta-divider">|</span>
+                <span id="view-supplier-email">billing@apexcorp.com</span>
+              </div>
+            </div>
+
+            <!-- Invoice Info & Place of Supply -->
+            <div class="inv-meta-card invoice-info-card">
+              <div class="card-caption">INVOICE SPECIFICATIONS</div>
+              <table class="meta-table">
+                <tr>
+                  <td>Invoice No:</td>
+                  <td><strong class="invoice-no-highlight" id="view-inv-number">INV-2026-0842</strong></td>
+                </tr>
+                <tr>
+                  <td>Invoice Date:</td>
+                  <td><strong id="view-inv-date">26-09-2026</strong></td>
+                </tr>
+                <tr>
+                  <td>Due Date:</td>
+                  <td><span id="view-inv-due-date">11-10-2026</span></td>
+                </tr>
+                <tr>
+                  <td>Place of Supply:</td>
+                  <td><strong id="view-place-of-supply">Delhi (07)</strong></td>
+                </tr>
+                <tr>
+                  <td>Supply Category:</td>
+                  <td><span id="view-supply-type-badge" class="badge-tax-type">Inter-State (IGST)</span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- BUYER & DISPATCH DETAILS GRID -->
+          <div class="inv-parties-grid">
+            <!-- Billed To (Buyer) -->
+            <div class="inv-meta-card buyer-card">
+              <div class="card-caption">BILLED TO (BUYER / RECIPIENT)</div>
+              <div class="buyer-main-name" id="view-buyer-name">Nexus Infotech Solutions LLP</div>
+              <div class="address-line" id="view-buyer-address">Suite 502, Cyber Tower B, Hinjewadi Phase 1, Pune, Maharashtra - 411057</div>
+              
+              <div class="meta-row-compact">
+                <span class="meta-tag">GSTIN:</span>
+                <strong class="gstin-badge" id="view-buyer-gstin">27BBBBB5678B1Z2</strong>
+              </div>
+              <div class="meta-row-compact">
+                <span class="meta-tag">State &amp; Code:</span>
+                <span id="view-buyer-state">Maharashtra (27)</span>
+              </div>
+              <div class="meta-row-compact">
+                <span class="meta-tag">Contact:</span>
+                <span id="view-buyer-phone">+91 91234 56789</span>
+                <span class="meta-divider">|</span>
+                <span id="view-buyer-email">accounts@nexusinfotech.io</span>
+              </div>
+            </div>
+
+            <!-- Shipped To -->
+            <div class="inv-meta-card shipping-card">
+              <div class="card-caption">SHIPPED TO (CONSIGNEE)</div>
+              <div class="buyer-main-name" id="view-shipping-name">Nexus Infotech Solutions LLP</div>
+              <div class="address-line" id="view-shipping-address">Suite 502, Cyber Tower B, Hinjewadi Phase 1, Pune, Maharashtra - 411057</div>
+              <div class="meta-row-compact mt-1">
+                <span class="meta-tag">Destination State:</span>
+                <span id="view-shipping-state">Maharashtra (27)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRODUCTS & LINE ITEMS TABLE -->
+          <div class="inv-table-wrapper">
+            <table class="inv-items-table" id="view-items-table">
+              <thead>
+                <tr>
+                  <th class="col-sr">#</th>
+                  <th class="col-desc">Description of Goods / Services</th>
+                  <th class="col-hsn">HSN/SAC</th>
+                  <th class="col-qty">Qty</th>
+                  <th class="col-unit">Unit</th>
+                  <th class="col-rate">Rate (<span class="currency-label">₹</span>)</th>
+                  <th class="col-disc">Disc %</th>
+                  <th class="col-taxable">Taxable Amt (<span class="currency-label">₹</span>)</th>
+                  <th class="col-tax-rate">GST %</th>
+                  <th class="col-total">Total (<span class="currency-label">₹</span>)</th>
+                </tr>
+              </thead>
+              <tbody id="view-items-tbody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TOTAL AMOUNT IN WORDS & TAX BREAKDOWN BLOCK -->
+          <div class="inv-bottom-section">
+            <div class="inv-bottom-left">
+              <!-- AMOUNT IN WORDS BOX (Crucial Requirement) -->
+              <div class="amount-in-words-box">
+                <div class="words-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  TOTAL INVOICE AMOUNT IN WORDS:
+                </div>
+                <div class="words-content" id="view-amount-in-words">
+                  Rupees Zero Only
+                </div>
+              </div>
+
+              <!-- Bank Details and UPI QR Code -->
+              <div class="bank-details-wrapper">
+                <div class="bank-info-box">
+                  <div class="bank-title">BANK &amp; REMITTANCE DETAILS</div>
+                  <table class="bank-table">
+                    <tr>
+                      <td>Bank:</td>
+                      <td><strong id="view-bank-name">HDFC Bank Ltd</strong></td>
+                    </tr>
+                    <tr>
+                      <td>A/C No:</td>
+                      <td><strong id="view-bank-ac">50200089123456</strong></td>
+                    </tr>
+                    <tr>
+                      <td>IFSC:</td>
+                      <td><strong id="view-bank-ifsc">HDFC0001234</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Branch:</td>
+                      <td><span id="view-bank-branch">Okhla Phase III, New Delhi</span></td>
+                    </tr>
+                    <tr>
+                      <td>UPI ID:</td>
+                      <td><span id="view-bank-upi">apexenterprises@hdfcbank</span></td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- UPI QR Code Payment Box -->
+                <div class="qr-payment-box" id="view-qr-container">
+                  <div class="qr-title">SCAN TO PAY</div>
+                  <div class="qr-image-wrapper">
+                    <canvas id="upi-qr-canvas" width="84" height="84"></canvas>
+                  </div>
+                  <span class="qr-sub">Instant UPI Pay</span>
+                </div>
+              </div>
+
+              <!-- Terms & Conditions Box -->
+              <div class="terms-conditions-box">
+                <div class="terms-title">TERMS &amp; CONDITIONS:</div>
+                <div class="terms-content" id="view-inv-terms">
+                  1. Payment terms: 100% within 15 days from the date of invoice.<br>
+                  2. Interest @ 18% p.a. will be charged for delayed payments.<br>
+                  3. Goods once sold will not be taken back or exchanged.<br>
+                  4. Subject to Delhi jurisdiction only.
+                </div>
+              </div>
+            </div>
+
+            <!-- Tax Summary & Grand Total (Right Column) -->
+            <div class="inv-bottom-right">
+              <table class="calculation-table">
+                <tr>
+                  <td>Total Taxable Value:</td>
+                  <td class="num-cell" id="view-total-taxable">₹ 0.00</td>
+                </tr>
+
+                <!-- Intra-state tax rows -->
+                <tr id="row-cgst" style="display:none;">
+                  <td>CGST Amount:</td>
+                  <td class="num-cell" id="view-total-cgst">₹ 0.00</td>
+                </tr>
+                <tr id="row-sgst" style="display:none;">
+                  <td>SGST Amount:</td>
+                  <td class="num-cell" id="view-total-sgst">₹ 0.00</td>
+                </tr>
+
+                <!-- Inter-state tax row -->
+                <tr id="row-igst">
+                  <td>IGST Amount:</td>
+                  <td class="num-cell" id="view-total-igst">₹ 0.00</td>
+                </tr>
+
+                <!-- Additional Adjustments -->
+                <tr id="row-discount" style="display:none;">
+                  <td>Discount:</td>
+                  <td class="num-cell text-danger" id="view-total-discount">- ₹ 0.00</td>
+                </tr>
+                <tr id="row-shipping" style="display:none;">
+                  <td>Freight / Delivery:</td>
+                  <td class="num-cell" id="view-total-shipping">+ ₹ 0.00</td>
+                </tr>
+                <tr id="row-roundoff">
+                  <td>Round Off:</td>
+                  <td class="num-cell" id="view-total-roundoff">₹ 0.00</td>
+                </tr>
+
+                <!-- Grand Total -->
+                <tr class="grand-total-row">
+                  <td>
+                    <strong>GRAND TOTAL:</strong>
+                    <div class="tax-inclusive-tag">(Inclusive of All Taxes)</div>
+                  </td>
+                  <td class="num-cell grand-total-amount" id="view-grand-total">
+                    ₹ 0.00
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Customer Notes -->
+              <div class="notes-box-small" id="view-notes-box">
+                <span id="view-inv-notes">Thank you for your valued business!</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SELLER SIGNATURE AND STAMP SECTION (Explicit User Requirement) -->
+          <div class="signature-stamp-section">
+            <div class="declaration-note">
+              <strong>Declaration:</strong> We declare that this invoice shows the actual price of the goods or services described and that all particulars are true and correct.
+            </div>
+
+            <div class="signature-boxes-wrapper">
+              <!-- Left: Customer Acknowledgment -->
+              <div class="sig-box customer-sig-box">
+                <div class="sig-box-title">CUSTOMER ACKNOWLEDGMENT</div>
+                <div class="sig-space-holder"></div>
+                <div class="sig-caption-line">Receiver's Signature &amp; Company Stamp</div>
+              </div>
+
+              <!-- Right: Seller Stamp & Signature -->
+              <div class="sig-box seller-sig-box">
+                <div class="sig-box-title">
+                  For <span id="view-sig-company-name">APEX ENTERPRISES PVT LTD</span>
+                </div>
+                
+                <!-- Overlay container for Rubber Stamp and Seller Signature -->
+                <div class="stamp-and-sig-display-area" id="stamp-and-sig-display-area">
+                  <!-- Rubber Stamp Element -->
+                  <div class="stamp-overlay" id="view-rubber-stamp">
+                    <img id="view-stamp-img" src="stamp-default.svg" alt="Company Stamp">
+                  </div>
+                  <!-- Drawn or Uploaded Signature Element -->
+                  <div class="signature-overlay" id="view-seller-signature">
+                    <img id="view-sig-img" src="" alt="Seller Signature" style="display:none;">
+                  </div>
+                </div>
+
+                <div class="sig-caption-line">
+                  <strong id="view-signatory-name">Rajesh Sharma</strong><br>
+                  <span id="view-signatory-designation">Authorized Signatory &amp; Stamp</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Watermark / Page info -->
+          <div class="invoice-footer-bar">
+            <span>This is a computer generated commercial tax invoice.</span>
+            <span>Page 1 of 1</span>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Saved Invoices Drawer / Modal -->
+  <dialog id="modal-saved-invoices" class="app-dialog">
+    <div class="dialog-header">
+      <h3>Saved Invoices History</h3>
+      <button type="button" class="btn-close" id="btn-close-saved-modal">&times;</button>
+    </div>
+    <div class="dialog-body">
+      <div id="saved-invoices-list" class="saved-list-container">
+        <p class="text-muted text-center py-4">No saved invoices found. Click "Save" in the top bar to save invoices.</p>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" id="btn-export-all-json" class="btn btn-outline btn-sm">Export All (JSON)</button>
+      <label for="input-import-json" class="btn btn-outline btn-sm">Import (JSON)</label>
+      <input type="file" id="input-import-json" accept=".json" style="display:none;">
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-close-saved-modal-2">Close</button>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container no-print"></div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

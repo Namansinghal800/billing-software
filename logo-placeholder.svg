@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="50%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.15" />
+    </filter>
+  </defs>
+  
+  <!-- Icon Emblem -->
+  <g transform="translate(10, 10)">
+    <rect x="0" y="0" width="60" height="60" rx="14" fill="url(#logoGrad)" filter="url(#shadow)" />
+    <!-- Stylized Hexagon & Growth Chart inside -->
+    <path d="M30 14 L46 23 L46 41 L30 50 L14 41 L14 23 Z" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" />
+    <path d="M22 36 L28 30 L34 34 L40 24" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="40" cy="24" r="2.5" fill="#ffffff" />
+  </g>
+
+  <!-- Typography -->
+  <text x="82" y="38" font-family="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif" font-size="24" font-weight="800" fill="#0f172a" letter-spacing="-0.5">
+    APEX<tspan fill="#2563eb">CORP</tspan>
+  </text>
+  <text x="83" y="55" font-family="'Inter', system-ui, sans-serif" font-size="10.5" font-weight="600" fill="#64748b" letter-spacing="2">
+    ENTERPRISES &amp; SOLUTIONS
+  </text>
+</svg>
